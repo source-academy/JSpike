@@ -1,2 +1,2 @@
 # JSpike
-Support for programming Lego Spike kits in JavaScript
+Support for programming LEGO education Spike kits in JavaScript
