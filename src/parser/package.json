@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "js-slang": "^1.0.3",
-    "sicp": "^1.1.4",
-    "sipc": "^1.0.1"
+    "sicp": "^1.1.4"
   }
 }
