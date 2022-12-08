@@ -263,7 +263,7 @@ function objectify(t): SyntaxTree {
     }
 }
 
-function parse_into_json(program) {
+export function parse_into_json(program) {
     let obj = objectify(parse(program));
     let json = JSON.stringify(obj);
     let fs = require('fs');
