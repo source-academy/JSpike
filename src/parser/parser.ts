@@ -1,8 +1,6 @@
-// Node.js v17.6.0
-
-import { display, error, head, is_null, map, parse, tail } from "sicp";
-
-declare var require: any;
+// Adapted from https://github.com/source-academy/JSpike/blob/main/src/parser/parser.ts
+// @ts-ignore missing type definitions
+import { error, head, is_null, map, parse, tail } from "sicp";
 
 type List<A> = null | [A, List<A>];
 
@@ -97,13 +95,14 @@ type SyntaxTree =
   | Spread
   | Property;
 
-function list_to_array(xs) {
+function list_to_array(xs: any): any {
   return is_null(xs) ? [] : [head(xs)].concat(list_to_array(tail(xs)));
 }
 
-function parameters(xs) {
+// FIXME: Remove `any` type
+function parameters(xs: any) {
   return map(
-    (x) =>
+    (x: any) =>
       head(x) === "rest_element"
         ? { tag: "rest", sym: head(tail(head(tail(x)))) }
         : head(tail(x)),
@@ -111,9 +110,9 @@ function parameters(xs) {
   );
 }
 
-// turn tagged list syntax from parse into object
-function objectify(t): SyntaxTree {
-  //  display_list(t, "in objectify");
+// FIXME: Remove `any` type
+/** Turns tagged list syntax from parse into object */
+function objectify(t: any): SyntaxTree {
   switch (head(t)) {
     case "literal":
       return { tag: "lit", val: head(tail(t)) };
@@ -248,7 +247,8 @@ function objectify(t): SyntaxTree {
     case "import_declaration":
       return {
         tag: "import",
-        syms: map((x) => head(tail(x)), head(tail(t))),
+        // FIXME: Remove `any` type
+        syms: map((x: any) => head(tail(x)), head(tail(t))),
         from: head(tail(tail(t))),
       };
     case "this_expression":
@@ -270,7 +270,8 @@ function objectify(t): SyntaxTree {
   }
 }
 
-export function parse_into_json(program) {
+// FIXME: Remove `any` type
+export function parse_into_json(program: any) {
   let obj = objectify(parse(program));
   let json = JSON.stringify(obj);
   return json;
