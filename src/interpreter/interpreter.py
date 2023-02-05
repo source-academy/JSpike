@@ -138,7 +138,7 @@ def apply_unop(op, v):
 def builtin_microcode_display(args):
     s = str(args[0])
     if len(args) == 2:
-        if type(arg[1]) is str:
+        if type(args[1]) is str:
             s = args[1] + ' ' + s
         else:
             raise Exception("display expects string as second argument")
@@ -643,10 +643,8 @@ cse_microcode = {
                           cmd['pred']
                           ]),
     'app':
-    lambda cmd: C.extend([{'tag': 'app_i', 'arity': len(cmd['args'])},
-                          # spread: hope this works in Micropython
-                          * cmd['args'],
-                          cmd['fun']]),
+    lambda cmd: C.extend(
+        [{'tag': 'app_i', 'arity': len(cmd['args'])}] + cmd['args'] + [cmd['fun']]),
     'assmt':
     lambda cmd: C.extend([{'tag': 'assmt_i', 'sym': cmd['sym']},
                           cmd['expr']]),
@@ -658,8 +656,8 @@ cse_microcode = {
     'spread':
     lambda cmd: S.append(cmd),
     'arr_lit':
-    lambda cmd: C.extend([{'tag': 'arr_lit_i', 'arity': len(cmd['elems'])},
-                          * rev(cmd['elems'])]),
+    lambda cmd: C.extend(
+        [{'tag': 'arr_lit_i', 'arity': len(cmd['elems'])}] + rev(cmd['elems'])),
     'arr_acc':
     lambda cmd: C.extend([{'tag': 'arr_acc_i'},
                           cmd['ind'],
