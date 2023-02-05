@@ -34,15 +34,19 @@ gc.disable()
 # useful helpers
 ######################
 
-# reimplement reduce because functools not in Micropython
+
 def reduce(f, iterable, init):
+    # Reimplement reduce because functools not in Micropython
     res = init
     for x in iterable:
         res = f(res, x)
     return res
 
-# this map is like Scheme's map, not like Python's map
+
 def scheme_map(f, iterable):
+    '''
+    Maps like Scheme's `map`, not like Python's `map`
+    '''
     def g(acc, x):
         acc.append(f(x))
         return acc
@@ -75,8 +79,9 @@ def is_builtin(x):
 def is_string(x):
     return type(x) is str
 
-# printing not speed-critical, so nested conditionals are fine
+
 def value_to_string(x):
+    # Printing not speed-critical, so nested conditionals are fine
     if x is Undefined:
         return 'undefined'
     elif x is True:
@@ -119,8 +124,9 @@ binop_microcode = {
     '!==': lambda x, y: not (x is y)
 }
 
-# v2 is popped before v1
+
 def apply_binop(op, v2, v1):
+    # `v2` is popped before `v1`
     return binop_microcode[op](v1, v2)
 
 
@@ -393,9 +399,12 @@ def handle_sequence(seq):
 # handling blocks
 ####################
 
-# scanning out the declarations from (possibly nested)
-# sequences of statements, ignoring blocks
+
 def scan(t):
+    '''
+    Scans out the declarations from (possibly nested)
+    sequences of statements, ignoring blocks
+    '''
     def f(acc, x):
         acc.extend(scan(x))
         return acc
