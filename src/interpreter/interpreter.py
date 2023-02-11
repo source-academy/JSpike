@@ -434,15 +434,6 @@ def scan(t):
 # names declared at program level get allocated
 # in a program frame
 
-
-# evaluation of toplevel results
-# in the value undefined if the
-# stash is empty
-C = [{'tag': 'push_undefined_if_needed_i'},
-     {'tag': 'blk',
-      'body': json.loads(json_string)}]
-print("input: " + str(C))
-
 ###############################
 # stash S
 ###############################
@@ -773,6 +764,16 @@ cse_microcode = {
     'arr_assmt_i':
     cse_microcode_arr_assmt_i
 }
+
+json_string = '{"tag":"for","init":{"tag":"let","sym":"i","expr":{"tag":"lit","val":0}},"pred":{"tag":"binop","sym":"<","frst":{"tag":"nam","sym":"i"},"scnd":{"tag":"lit","val":10}},"upd":{"tag":"assmt","sym":"i","expr":{"tag":"binop","sym":"+","frst":{"tag":"nam","sym":"i"},"scnd":{"tag":"lit","val":1}}},"body":{"tag":"seq","stmts":[{"tag":"app","fun":{"tag":"nam","sym":"spike_showImage"},"args":[{"tag":"lit","val":"00099:00990:09900:99000:09900"}]},{"tag":"app","fun":{"tag":"nam","sym":"spike_sleep"},"args":[{"tag":"lit","val":0.2}]},{"tag":"app","fun":{"tag":"nam","sym":"spike_showImage"},"args":[{"tag":"lit","val":"00990:09900:99000:09900:00990"}]},{"tag":"app","fun":{"tag":"nam","sym":"spike_sleep"},"args":[{"tag":"lit","val":0.2}]},{"tag":"app","fun":{"tag":"nam","sym":"spike_showImage"},"args":[{"tag":"lit","val":"09900:99000:09900:00990:00099"}]},{"tag":"app","fun":{"tag":"nam","sym":"spike_sleep"},"args":[{"tag":"lit","val":0.2}]}]}}'
+
+# evaluation of toplevel results
+# in the value undefined if the
+# stash is empty
+C = [{'tag': 'push_undefined_if_needed_i'},
+     {'tag': 'blk',
+      'body': json.loads(json_string)}]
+print("input: " + str(C))
 
 # machine loops until control is empty
 while True:
