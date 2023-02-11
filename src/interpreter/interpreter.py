@@ -11,24 +11,10 @@
 # comment this for testing with Python 3
 # uncomment this for testing with MicroPython
 
-# from spike import PrimeHub, LightMatrix, Button, StatusLight,
-#         ForceSensor, MotionSensor, Speaker, ColorSensor,
-#         App, DistanceSensor, Motor, MotorPair
-# from spike.control import wait_for_seconds, wait_until, Timer
-
-import gc
 import json
 import math
 import random
 import time
-# for checking memory consumption, see
-# https://www.geeksforgeeks.org/monitoring-memory-usage-of-a-running-python-program/
-import tracemalloc
-
-tracemalloc.start()
-
-# for contolling garbage collection
-gc.disable()
 
 ######################
 # useful helpers
@@ -418,29 +404,6 @@ def scan(t):
     else:
         return []
 
-# json_string = open("/Users/henz/Documents/Projects/Spike/source.json", "r").read()
-
-# json_string = open("/Users/henz/Documents/Projects/Spike/prelude.json", "r").read()
-
-# json_string = "{\"tag\":\"app\",\"fun\":{\"tag\":\"nam\",\"sym\":\"math_pow\"},\"args\":[{\"tag\":\"lit\",\"val\":2},{\"tag\":\"lit\",\"val\":3}]}"
-
-# json_string = '{"tag":"app","fun":{"tag":"nam","sym":"math_random"}, \
-#                "args":[]}'
-
-
-json_string = '{"tag":"app","fun":{"tag":"nam","sym":"is_list"}, \
-                "args":[{"tag":"lit","val":null}]}'
-
-# json_string = '{"tag":"nam", "sym": "math_SQRT2"}'
-
-# json_string = '{"tag":"app","fun":{"tag":"nam","sym":"arity"}, \
-#                "args":[{"tag":"nam","sym":"math_sin"}]}'
-
-# json_string = '{"tag":"app","fun":{"tag":"nam","sym":"list"}, \
-#                "args":[{"tag":"lit","val":1}, \
-#                        {"tag":"lit","val":2}]}'
-
-
 ###############################
 # machine overview
 ###############################
@@ -471,13 +434,13 @@ json_string = '{"tag":"app","fun":{"tag":"nam","sym":"is_list"}, \
 # names declared at program level get allocated
 # in a program frame
 
+
 # evaluation of toplevel results
 # in the value undefined if the
 # stash is empty
 C = [{'tag': 'push_undefined_if_needed_i'},
      {'tag': 'blk',
       'body': json.loads(json_string)}]
-# C = [{'tag': 'lit', 'val': 'asdf'}]
 print("input: " + str(C))
 
 ###############################
@@ -812,13 +775,7 @@ cse_microcode = {
 }
 
 # machine loops until control is empty
-
-# for steps in range(1000):
 while True:
-    #    print('Next command: ' + cmd['tag'])
-    #    print('C: ' + str(C))
-    #    print('S: ' + str(S))
-    #    print('E: ' + str(E))
     if not C:
         break
     cmd = C.pop()
@@ -827,11 +784,3 @@ while True:
 if len(S) > 1 or len(S) < 1:
     raise Exception('internal error: stash must be singleton but is: ', S)
 print("output: " + value_to_string(S[0]))
-
-# displaying the memory before and after gc
-print("memory consumption before gc: " +
-      str(tracemalloc.get_traced_memory()[0]) + " bytes")
-gc.collect(2)
-print("memory consumption after  gc: " +
-      str(tracemalloc.get_traced_memory()[0]) + " bytes")
-tracemalloc.stop()
